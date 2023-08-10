@@ -1,5 +1,8 @@
-# Windows 95 Theme for Jekyll
+# Blog posts
 
+Getting some cool posts up & running.
+
+# Sources / Credits
 ![ss](https://github.com/h01000110/windows-95/raw/gh-pages/screenshot_2.png)
 
 Homepage: [Windows 95](https://h01000110.github.io/20170917/windows-95)

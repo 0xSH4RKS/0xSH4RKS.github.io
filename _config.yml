@@ -1,25 +1,15 @@
-permalink: /:year:month:day/:title
-url: #Your url here
-baseurl: /project
+# Example Site settings
 
-# variables
-name: Your Site Name
-description: Your description here
-google_verification: null
+#google_analytics: UA-NNNNNNNN-N
 
+#header_pages:
+#  - index.md
+#  - about.md
 
-# File management
-include: [".htaccess"]
-exclude: ["README.md", "LICENSE"]
+#footer: 'follow us on <a href="https://twitter.com/">twitter</a>'
 
-# Sass
-sass:
-  style: :compressed
-  sass_dir: _sass
+#style: light # dark (default) or light
+#listen_for_clients_preferred_style: true # true or false (default)
 
-# Markdown
-markdown: kramdown
-kramdown:
-  input: GFM
-  syntax_highlighter_opts:
-    disable : true
+plugins:
+  - jekyll-seo-tag

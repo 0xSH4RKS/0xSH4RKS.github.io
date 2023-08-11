@@ -1,9 +1,18 @@
 ---
-title: /
+title: /home
 layout: home
 permalink: /
 ---
 
-# Lorem ipsum
+# Yo
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+If you're here, you're probably interested in deep dives into tech, just as I am. This is where I document my explorations in red teaming, malware dev, training and everything in between.
+
+Expect nothing, I resonate with what Alex Jones kindly said:
+
+<img src="assets/alex-jones.png" alt="alex jones retard" width="100%"/>
+
+Whether you're a seasoned tech enthusiast or just starting out, there's something here for everyone. Join me in this journey of discovery and problem-solving.
+
+Stay curious,
+0xSH4RKS

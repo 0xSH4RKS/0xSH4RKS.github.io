@@ -1,10 +1,16 @@
-# Example Site settings
+# Site settings
 
 #google_analytics: UA-NNNNNNNN-N
 
 header_pages:
  - index.md
  - about.md
+ - ramblings.md
+
+collections:
+  ramblings:
+    output: true
+
 
 footer: 'follow me on <a href="https://twitter.com/0xSH4RKS">twitter</a>'
 

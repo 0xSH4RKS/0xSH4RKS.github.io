@@ -2,4 +2,7 @@
 layout: default
 ---
 
-{{ content }}
+{% include toc.html html=content sanitize=true ordered=true %}
+
+{{ content}}
+

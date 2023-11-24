@@ -4,15 +4,15 @@ layout: home
 permalink: /
 ---
 
-# Yo
+# hello_world
 
-If you're here, you're probably interested in deep dives into tech, just as I am. This is where I document my explorations in red teaming, malware dev, training and everything in between.
+Greetings, hackers! You've come across my digital exploration — a hub dedicated to the intricate art of red teaming, the craft of malware development, the rigor of training, and the myriad realms that lie at the intersection of technology and security.
 
-Expect nothing, I resonate with what Alex Jones kindly said:
+In the ever-evolving landscape of cyberspace, staying informed is tantamount to wielding power. Yet, it remains a universal truth that no individual can possess omniscience. Hence, approach with an open mind, for as the inimitable Alex Jones once implied, certainty can be elusive.
 
-<img src="assets/alex-jones.png" alt="alex jones retard" width="100%"/>
+<img src="assets/alex-jones.png" alt="alex jones saying" width="75%"/>
 
-Whether you're a seasoned tech enthusiast or just starting out, there's something here for everyone. Join me in this journey of discovery and problem-solving.
+Here, whether you're a veteran in the field or embarking on your first foray into the digital unknown, you'll find a rich repository of insights and knowledge. Embark with me on this odyssey of enlightenment and inventive challenge-solving.
 
 Stay curious,
 0xSH4RKS

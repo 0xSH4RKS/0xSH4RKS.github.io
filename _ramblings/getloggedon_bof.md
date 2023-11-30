@@ -18,7 +18,9 @@ During red team operations we, more time than not, are targeting the Active Dire
 
 So a while back I saw this tweet from <a href="https://twitter.com/Geiseric4">@Geiseric4</a>: 
 
-<img src="../assets/getloggedonbof/tweet.png" width="50%">
+<p align="center">
+    <img src="../assets/getloggedonbof/tweet.png" width="65%">
+</p>
 
 He tweeted about a <a href="https://gist.github.com/GeisericII/6849bc86620c7a764d88502df5187bd0">python script</a> that does just what we want to accomplish with our BOF:
 

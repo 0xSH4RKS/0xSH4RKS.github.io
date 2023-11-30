@@ -16,9 +16,9 @@ And however it is quite easy to just run Sharphound or Bloodhound.py, it might b
 
 # Original Idea
 
-So a while back I saw this tweet: 
+So a while back I saw this tweet from <a src="https://twitter.com/Geiseric4">@Geiseric4</a>: 
 
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Following <a href="https://twitter.com/splinter_code?ref_src=twsrc%5Etfw">@splinter_code</a> idea, you can also start RemoteRegistry remotely. This way you can check on which server DAs are connected, in case you want dump their creds. This script could help: <a href="https://t.co/xmAzF2k81c">https://t.co/xmAzF2k81c</a><br>It works from low privileged user 😉 <a href="https://t.co/KXgPsCGNXP">pic.twitter.com/KXgPsCGNXP</a></p>&mdash; Geiseric (@Geiseric4) <a href="https://twitter.com/Geiseric4/status/1719764121111908510?ref_src=twsrc%5Etfw">November 1, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+<img src="../assets/getloggedonbof/tweet.png" width="100%">
 
 He tweeted about a python script that does just what we want to accomplish with our BOF:
 

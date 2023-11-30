@@ -12,25 +12,25 @@ During red team operations we, more time than not, are targeting the Active Dire
 - NetSessionEnum
 - Remote Registry
 
-And however it is quite easy to just run Sharphound or Bloodhound.py, it might be the case that we cannot open a socks proxy or just run a .NET assembly in memory without being detected. So how to fix this? Well I tried writing a quick a dirty Cobalt Strike BOF to help us with just that.
+<br>And however it is quite easy to just run Sharphound or Bloodhound.py, it might be the case that we cannot open a socks proxy or just run a .NET assembly in memory without being detected. So how to fix this? Well I tried writing a quick a dirty Cobalt Strike BOF to help us with just that.
 
-# Original Idea
+## Original Idea
 
-So a while back I saw this tweet from <a src="https://twitter.com/Geiseric4">@Geiseric4</a>: 
+So a while back I saw this tweet from <a href="https://twitter.com/Geiseric4">@Geiseric4</a>: 
 
-<img src="../assets/getloggedonbof/tweet.png" width="100%">
+<img src="../assets/getloggedonbof/tweet.png" width="50%">
 
-He tweeted about a python script that does just what we want to accomplish with our BOF:
+He tweeted about a <a href="https://gist.github.com/GeisericII/6849bc86620c7a764d88502df5187bd0">python script</a> that does just what we want to accomplish with our BOF:
 
 - Start the Remote Registry (if not running)
 - Session enumeration using Remote Registry
 - SID to accountname conversion
 
-
-
-
-
 # Project
+--- 
+
+
+
 
 WIP - BOF almost ready
 [Cobalt Strike - GetLoggedOn BOF](https://github.com/0xSH4RKS/getloggedonBOF)

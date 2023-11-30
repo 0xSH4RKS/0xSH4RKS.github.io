@@ -1,8 +1,11 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  `<META HTTP-EQUIV='Content-Security-Policy' CONTENT="script-src 'self' platform.twitter.com twitter.com;">`
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <!-- twitter embed -->
+  <meta HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src https: 'self'; script-src https: *.twitter.com; style-src https: 'self' *.twitter.com;">
+
   <title>{{ page.title }}</title>
   {%- seo title=false -%}
 

@@ -31,6 +31,8 @@ He tweeted about a <a href="https://gist.github.com/GeisericII/6849bc86620c7a764
 # Project
 --- 
 
+So we want to create a BOF that will check if the remote registry is running, if it is not running - start it, enumerate SIDs from a registry subkey that is readable for all users and convert the SIDs to usernames using the LSA.
+
 
 
 

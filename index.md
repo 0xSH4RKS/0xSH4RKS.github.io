@@ -4,19 +4,27 @@ layout: home
 permalink: /
 ---
 
-# hello_world
+# whoami
 
-Greetings, hackers! You've come across my digital exploration — a hub dedicated to the intricate art of red teaming, the craft of malware development, the rigor of training, and the myriad realms that lie at the intersection of technology and security.
+![Thomas Hayen](assets/sh4rksicon.jpg){: .profile-image}
 
-In the ever-evolving landscape of cyberspace, staying informed is tantamount to wielding power. Yet, it remains a universal truth that no individual can possess omniscience. 
+I am a seasoned cybersecurity professional with a robust background in red teaming, malware development, and security training. I have demonstrated expertise in identifying and mitigating complex security threats, contributing significantly to enhancing organizational security postures.
 
-Hence, approach with an open mind, for as the inimitable Alex Jones once implied, **certainty can be elusive**.
+Throughout my career, I have been dedicated to advancing cybersecurity practices, focusing on developing innovative strategies to counteract emerging threats. My commitment to continuous learning and knowledge sharing has established me as a respected figure in the cybersecurity community.
 
-<p align="center">
-    <img src="assets/alex-jones.png" alt="alex jones saying" width="75%"/>
-</p>
+My professional journey reflects a steadfast dedication to the field of cybersecurity, marked by a series of accomplishments that underscore my skills and expertise. My contributions have been instrumental in fortifying the security frameworks of the organizations I have collaborated with.
 
-Here, whether you're a veteran in the field or embarking on your first foray into the digital unknown, you'll find a rich repository of insights and knowledge. Embark with me on this odyssey of enlightenment and inventive challenge-solving.
+For a comprehensive overview of my professional experience and achievements, please visit my [LinkedIn profile](https://www.linkedin.com/in/thomashayen/).
 
-Stay curious,
-0xSH4RKS - Thomas
+# Latest Ramblings
+
+{% for ramble in site.ramblings limit: 5 %}
+## [{{ ramble.title }}]({{ ramble.url }})
+*Published on {{ ramble.date | date: "%B %d, %Y" }}*
+
+{{ ramble.excerpt | strip_html | truncatewords: 30 }}
+
+[Read more]({{ ramble.url }})
+
+---
+{% endfor %}

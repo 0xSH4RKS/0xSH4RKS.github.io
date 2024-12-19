@@ -23,3 +23,5 @@ style: dark # dark (default) or light
 plugins:
   - jekyll-seo-tag
   - jekyll-toc
+
+markdown: kramdown

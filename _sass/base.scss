@@ -176,3 +176,42 @@ pre {
   margin-top: 1.5rem; /* Space above code block */
   margin-bottom: 1.5rem; /* Space below code block */
 }
+
+.centered-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2em 0;
+
+  img {
+    max-width: 100%;
+    width: 50%;
+  }
+
+  figcaption {
+    margin-top: 0.5em;
+    font-style: italic;
+    font-size: 0.9em;
+    text-align: center;
+    color: #666;
+  }
+}
+
+/* Override for manual adaptations */
+.centered-image.custom {
+  img {
+    width: 70%; // Adjust specific image width
+    border: 2px solid #ccc; // Add a border (example)
+  }
+
+  figcaption {
+    font-size: 1em; // Make caption larger
+    color: #333; // Change caption color
+  }
+}
+
+.centered-image.large {
+  img {
+    width: 80%;
+  }
+}

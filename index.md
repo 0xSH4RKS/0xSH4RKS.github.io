@@ -4,7 +4,7 @@ layout: home
 permalink: /
 ---
 
-# whoami
+# Intro
 
 ![Thomas Hayen](assets/sh4rksicon.jpg){: .profile-image}
 
@@ -14,7 +14,7 @@ Throughout my career, I have been dedicated to advancing cybersecurity practices
 
 My professional journey reflects a steadfast dedication to the field of cybersecurity, marked by a series of accomplishments that underscore my skills and expertise. My contributions have been instrumental in fortifying the security frameworks of the organizations I have collaborated with.
 
-For a comprehensive overview of my professional experience and achievements, please visit my [LinkedIn profile](https://www.linkedin.com/in/thomashayen/).
+For a comprehensive overview of my professional experience and achievements, please visit my [LinkedIn profile](https://www.linkedin.com/in/thomashayen/). And of course credits to openai for leviating me of the task to write an introduction :) .
 
 # Latest Ramblings
 

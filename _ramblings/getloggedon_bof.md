@@ -16,6 +16,7 @@ During red team operations we, more time than not, are targeting the Active Dire
 <br>And however it is quite easy to just run Sharphound or Bloodhound.py, it might be the case that we cannot open a socks proxy or just run a .NET assembly in memory without being detected. So how to fix this? Well I tried writing a quick a dirty Cobalt Strike BOF to help us with just that.
 
 ## Original Idea
+---
 
 So a while back I saw this tweet from <a href="https://twitter.com/Geiseric4">@Geiseric4</a>: 
 
@@ -35,6 +36,7 @@ He tweeted about a <a href="https://gist.github.com/GeisericII/6849bc86620c7a764
 So we want to create a BOF that will check if the remote registry is running, enumerate SIDs from a registry subkey that is readable for all users and convert the SIDs to usernames using the LSA.
 
 ## Implementation Details
+---
 
 We developed `getloggedon`, a BOF designed to function with minimal privileges, eliminating the need for administrative rights. Its operation involves:
 
@@ -45,6 +47,7 @@ We developed `getloggedon`, a BOF designed to function with minimal privileges, 
 <br>Here's a breakdown of the core functionality:
 
 ### Connecting to the Remote Registry
+---
 
 ```c
 dwresult = ADVAPI32$RegConnectRegistryA(hostname, HKEY_USERS, &rootkey);
@@ -53,6 +56,7 @@ dwresult = ADVAPI32$RegConnectRegistryA(hostname, HKEY_USERS, &rootkey);
 This function establishes a connection to the HKEY_USERS hive on the specified remote machine (hostname). If hostname is NULL, it defaults to the local machine.
 
 ### Enumerating Subkeys (SIDs)
+---
 
 ```c
 while (TRUE) {
@@ -69,6 +73,7 @@ while (TRUE) {
 This loop iterates over each subkey in HKEY_USERS, with each subkey name representing a user SID. The RegEnumKeyExA function retrieves the name of each subkey.
 
 ### Converting SIDs to Usernames
+---
 
 ```c
 if (ADVAPI32$ConvertStringSidToSidA(keyname, &pSid)) {
@@ -83,6 +88,7 @@ if (ADVAPI32$ConvertStringSidToSidA(keyname, &pSid)) {
 For each SID string (keyname), ConvertStringSidToSidA converts it to a binary SID. Subsequently, LookupAccountSidA retrieves the associated account name and domain name.
 
 ### Compilation and Usage
+---
 
 To compile the BOF, utilize the provided Makefile with MinGW-w64 on a Linux system:
 
@@ -101,16 +107,19 @@ getloggedon <optional: hostname>
 If no hostname is specified, the BOF queries the local machine.
 
 ## Limitations and Considerations
+---
 
 - Dependency on Remote Registry: The BOF relies on the Remote Registry service. If the service cannot be started due to policy restrictions, the enumeration will fail.
 - Permissions: While administrative privileges are not required, sufficient permissions to query the Remote Registry are necessary.
 
 ## Conclusion
+---
 
 The getloggedon BOF provides a lightweight and efficient method for enumerating logged-on users via the Remote Registry, particularly useful in scenarios where traditional tools may be impractical. Integrating this BOF into your Cobalt Strike toolkit can enhance situational awareness during red team engagements.
 
 
 # Sources
+---
 
 - [Bloodhound Inner Workings - Part 3](https://blog.compass-security.com/2022/05/bloodhound-inner-workings-part-3/)
 - [GetLoggedOn BOF](https://github.com/0xSH4RKS/getloggedonBOF)

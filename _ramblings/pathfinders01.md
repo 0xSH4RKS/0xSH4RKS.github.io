@@ -126,6 +126,7 @@ Let's look for some other artifacts, for example a string lookup for "hound" sho
 Needles to say, pre-loading the asembly into memory while staying stealthy is quite challenging. It is even more challenging if you consider that you cannot unload the assembly once it is loaded into memory. 
 
 ## execute_assembly
+---
 
 So what happens when we execute the pre-loaded assembly from memory? Same deal, a function called `GetFileFromStore` will locate the assembly based on the keyname we stored it with earlier (name of the binary) and decrypt it.
 
@@ -158,16 +159,94 @@ Having mapped out the active directory we could now start looking for attack pat
   <figcaption>Figure 12 - Kerberoasting?</figcaption>
 </figure>
 
-## Kerberoasting
+## An intro to Kerberoasting
+---
 
-Imagine a network as an amusement park, where rides represent services and tickets are used to access them. Each ride has a unique ticket (called a service principal name or SPN), and you need a valid pass (a Kerberos ticket) to get on.
+Kerberoasting is an attack technique in Windows Active Directory (AD) environments that exploits how the Kerberos authentication protocol issues service tickets (known as Ticket-Granting Service (TGS) tickets). By abusing legitimate Kerberos functionality, attackers can harvest TGS tickets for specific service accounts and attempt to crack them offline to recover the corresponding plaintext passwords. Since many service accounts are highly privileged or run critical services, compromising these accounts can lead to lateral movement and, in some cases, full domain compromise.
 
+<figure class="centered-image">
+  <img src="../assets/pathfinders01/kerberoasting_diagram1.png" style="border: 2px solid #ccc;">
+  <figcaption>Figure 13 - Kerberoasting Diagram</figcaption>
+</figure>
 
+### Disneyland? 
+---
 
-Once the attackers crack the ticket’s code, it’s like they’ve made a counterfeit pass that lets them ride any ride, sneak into restricted areas, and even take control of the park’s operations. This can lead to unauthorized access, escalation of privileges, and spreading their control throughout the network.
+Imagine you arrive at Disneyland (the domain) and purchase a day pass at the main gate (like getting a Ticket-Granting Ticket, or TGT). This day pass proves you've paid for entry (i.e., you’re a legitimate user on the domain), but it doesn’t automatically let you ride every attraction inside.
 
+Inside the park, each ride is a different service (for example, a SQL database, a web service, etc.). In Disneyland terms, these rides are uniquely identified—think of each having its own name or identifier, like Space Mountain or Pirates of the Caribbean. In Kerberos, that’s called the Service Principal Name (SPN). Whenever you want to get on a specific ride, you head to a special ticket booth inside Disneyland (the Domain Controller, or KDC). You present your day pass (the TGT) and ask for a ride-specific ticket—this is the TGS (Ticket-Granting Service ticket).
 
+The booth hands you a special pass for that one ride, but here’s the catch: it’s encrypted (in real Kerberos, it’s encrypted with the service account’s key). The ride operator (the service account) can validate that pass and let you on. In normal Disneyland terms, that’s where the story ends—your ride ticket works, and you have fun.
 
+<figure class="centered-image">
+  <img src="../assets/pathfinders01/kerberoasting_diagram2.png" style="border: 2px solid #ccc;">
+  <figcaption>Figure 14 - Disneyroasting(TM) Diagram</figcaption>
+</figure>
+
+However, in Kerberoasting, an attacker uses a perfectly valid Disneyland day pass (any domain account) to collect a bunch of these ride tickets for multiple rides. Each ticket is protected by the operator’s secret “key” (the service account’s password hash), but the attacker takes these tickets home (offline) and tries to crack or guess the ride operator’s secret key (or password) from the ticket. Once the attacker figures out the operator’s key (i.e., recovers the account’s actual password), they basically become that ride’s operator—able to do all sorts of things the operator can do (often with high privileges).
+
+## From theory to practise
+---
+
+The core Impacket script for Kerberoasting is [GetUserSPNs.py](https://github.com/fortra/impacket/blob/master/examples/GetUserSPNs.py). It can do two main things:
+
+- Enumerate all users with ServicePrincipalName attributes set.
+- Request a Kerberos service ticket (TGS) on behalf of those users, returning an encrypted TGS that can be cracked offline.
+
+<br>As we have access to a Mythic implant we can just use the built-in SOCKS proxy and proxy our attack through the Apollo agent. The agent's command to open a SOCKS5 proxy: `socks -Port 1080`. 
+
+After we [setup our proxychains config](https://medium.com/@psychomong/how-to-set-up-proxychains-a-step-by-step-guide-stay-anonymous-using-terminal-1887609ad633), we run the following command from your attacking (or any machine with Impacket installed):
+
+```python
+proxychains4 python3 GetUserSPNs.py redacted.domain/pentest:'SomeStrongPassword123' -dc-ip DC2-REDACTED -request
+```
+
+<figure class="centered-image large">
+  <img src="../assets/pathfinders01/socks5_network.png" style="border: 2px solid #ccc;">
+  <figcaption>Figure XX - SOCKS5 Proxy Overview</figcaption>
+</figure>
+
+What this does:
+
+- Enumerates all domain accounts with SPNs.
+- For each such account, the script requests a TGS ticket from the DC (**OPSEC Unsafe**).
+- The DC issues the TGS—encrypted with the service account’s password-derived key.
+- The script outputs the relevant hash (in a format that can be fed into cracking tools).
+
+<br>The interesting output, the service ticket looks like this:
+
+```
+$krb5tgs$23$*u0813$REDACTED.DOMAIN$REDACTED.DOMAIN/u0813*$6674ddf8(snipped for brevity)275af19
+```
+
+Each $krb5tgs$23$... line is a TGS you can crack offline.
+
+### Cracking the Service Ticket
+---
+
+Kerberoasting hashes typically use -m 13100 for Kerberos 5 TGS-RESPONSE (RC4-HMAC).
+
+```bash
+hashcat -m 13100 -a 0 kerberoast_hashes.txt /usr/share/wordlists/rockyou.txt
+```
+
+- `-m 13100` = Kerberos 5 TGS-RESPONSE (type 23)
+- `-a 0` = Dictionary attack mode
+- `kerberoast_hashes.txt` = Your file with $krb5tgs$... lines
+- `/usr/share/wordlists/rockyou.txt` = A common password dictionary
+
+<br>If Hashcat finds any matching passwords, it will display them in the terminal or store them in the potfile. For example, you might see something like:
+
+```
+u0813:SomeCrackedPassword123
+```
+
+Now what can the low-privileged service account do? Find out in the next episode...
+
+<figure class="centered-image">
+  <img src="../assets/pathfinders01/cliffhanger.png" style="border: 2px solid #ccc;">
+  <figcaption>Figure XX - Don't leave me hanging</figcaption>
+</figure>
 
 
 # Credits

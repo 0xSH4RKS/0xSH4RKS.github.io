@@ -10,6 +10,7 @@ published_date: 2025-01-29
 During a recent penetration test, I wanted to run [PowerHuntShares](https://github.com/NetSPI/PowerHuntShares), a PowerShell script designed to find secrets in shared resources and much more. If you haven't heard of it before, I highly recommend checking it out.
 
 ## RemoteSigned
+---
 
 The output of `Get-ExecutionPolicy -List` displays the execution policies defined across various scopes. Let's analyze it to understand which scripts can be executed based on the settings found on the device during the penetration test:
 
@@ -19,6 +20,8 @@ The output of `Get-ExecutionPolicy -List` displays the execution policies define
 </figure>
 
 ### Execution Policies in Effect
+---
+
 MachinePolicy: RemoteSigned
 - Scripts downloaded from the internet must be signed by a trusted publisher.
 - Local scripts (on the machine) can run without being signed.
@@ -27,6 +30,7 @@ LocalMachine: Unrestricted
 - No restrictions on scripts. All scripts can run, including those downloaded from the internet. However, you may receive a warning before running a script downloaded from the internet.
 
 ### Effective Execution Policy
+---
 
 The effective execution policy is determined by the highest priority scope with a defined policy. The priority order is:
 
@@ -39,6 +43,7 @@ The effective execution policy is determined by the highest priority scope with 
 <br>Based on our output, the effective execution policy is **RemoteSigned** because it is set at the MachinePolicy scope, which takes precedence over LocalMachine.
 
 ### What Scripts Can Be Executed?
+---
 
 Given the RemoteSigned policy in effect:
 
@@ -50,6 +55,8 @@ Given the RemoteSigned policy in effect:
 - Unsigned scripts downloaded from the internet.
 
 ### Set-ExecutionPolicy
+---
+
 Just set your execution policy to unrestricted bro. Well it is set through a GPO and scoped to LocalMachine...
 
 <figure class="centered-image">

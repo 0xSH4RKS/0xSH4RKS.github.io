@@ -123,11 +123,16 @@ After signing, it’s good practice to verify the script’s signature to ensure
 Get-AuthenticodeSignature "C:\Users\cds\Downloads\PowerHuntShares-main\PowerHuntShares-main\PowerHuntShares.psm1" | fl
 ```
 
-As seen in **Figure 6**, the output confirms the script is properly signed, making it ready for execution.
+As seen in **Figure 6** & **Figure 7**, which confirm the script is properly signed, making it ready for execution.
 
 <figure class="centered-image large">
   <img src="../assets/execution_policy/signature_check.png" style="border: 2px solid #ccc;">
-  <figcaption>Figure 6 - PowerHuntShares Signed</figcaption>
+  <figcaption>Figure 6 - PowerHuntShares Signed pt1</figcaption>
+</figure>
+
+<figure class="centered-image large">
+  <img src="../assets/execution_policy/signature_check2.png" style="border: 2px solid #ccc;">
+  <figcaption>Figure 7 - PowerHuntShares Signed pt2</figcaption>
 </figure>
 
 ## Running the signed script

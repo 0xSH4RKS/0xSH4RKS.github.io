@@ -18,9 +18,21 @@ For a comprehensive overview of my professional experience and achievements, ple
 
 # Latest Ramblings
 
-{% for ramble in site.ramblings limit: 5 %}
+{% assign ramblings = site.ramblings %}
+
+{%- for ramble in ramblings -%}
+  {%- if ramble.published_date == nil -%}
+    {%- assign ramble_published = ramble.date -%}
+  {%- else -%}
+    {%- assign ramble_published = ramble.published_date -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{% assign sorted_ramblings = ramblings | sort: "published_date" | reverse %}
+
+{% for ramble in sorted_ramblings limit: 5 %}
 ## [{{ ramble.title }}]({{ ramble.url }})
-*Published on {{ ramble.date | date: "%B %d, %Y" }}*
+*Published on {{ ramble.published_date | default: ramble.date | date: "%B %d, %Y" }}*
 
 {{ ramble.excerpt | strip_html | truncatewords: 30 }}
 
@@ -28,3 +40,4 @@ For a comprehensive overview of my professional experience and achievements, ple
 
 ---
 {% endfor %}
+

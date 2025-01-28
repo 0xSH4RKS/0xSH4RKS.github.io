@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Pathfinders - Episode: 1"
+published_date: 2025-01-30
 ---
 
 # What is this and why should I read it?

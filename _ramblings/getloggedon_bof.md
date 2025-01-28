@@ -1,6 +1,7 @@
 ---
 layout: post
 title: GetLoggedOn - Remote Registry Enumeration
+published_date: 2024-11-10
 ---
 
 # Remote Registry to enumerate the logged on users?

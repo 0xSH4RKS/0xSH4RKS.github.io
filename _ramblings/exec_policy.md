@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Execution Policy Bypass using Code Signing
+published_date: 2025-01-29
 ---
 
 # Sign your PowerShell Scripts 

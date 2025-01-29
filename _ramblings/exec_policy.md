@@ -32,13 +32,13 @@ LocalMachine: Unrestricted
 ### Effective Execution Policy
 ---
 
-The effective execution policy is determined by the highest priority scope with a defined policy. The priority order is:
+The precedence of the execution policy order is determined by the highest priority scope with a defined policy. The [priority order](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) is:
 
-1. Process (highest)
-2. CurrentUser
-3. LocalMachine
-4. UserPolicy
-5. MachinePolicy (lowest)
+1. MachinePolicy: Set by a Group Policy for all users of the computer.
+2. UserPolicy: Set by a Group Policy for the current user of the computer.
+3. Process: The Process scope only affects the current PowerShell session. The execution policy is saved in the environment variable `$env:PSExecutionPolicyPreference`, rather than the configuration file. When the PowerShell session is closed, the variable and value are deleted.
+4. CurrentUser: The execution policy affects only the current user. It's stored in the CurrentUser configuration file.
+5. LocalMachine: The execution policy affects all users on the current computer. It's stored in the AllUsers configuration file.
 
 <br>Based on our output, the effective execution policy is **RemoteSigned** because it is set at the MachinePolicy scope, which takes precedence over LocalMachine.
 

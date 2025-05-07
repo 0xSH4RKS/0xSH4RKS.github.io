@@ -8,13 +8,12 @@ permalink: /
 
 ![Thomas Hayen](assets/sh4rksicon.jpg){: .profile-image}
 
-I am a seasoned cybersecurity professional with a robust background in red teaming, malware development, and security training. I have demonstrated expertise in identifying and mitigating complex security threats, contributing significantly to enhancing organizational security postures.
+Cybersecurity professional with experience in red teaming, malware analysis, and security training. Passionate about offensive and defensive security, I enjoy tackling complex threats and sharing knowledge with the community.
 
-Throughout my career, I have been dedicated to advancing cybersecurity practices, focusing on developing innovative strategies to counteract emerging threats. My commitment to continuous learning and knowledge sharing has established me as a respected figure in the cybersecurity community.
+Currently Team Coordinator of the Red Team @easi | HackTheBox Ambassador
+Twitter/X: @[0xSH4RKS](https://x.com/0xSH4RKS)
 
-My professional journey reflects a steadfast dedication to the field of cybersecurity, marked by a series of accomplishments that underscore my skills and expertise. My contributions have been instrumental in fortifying the security frameworks of the organizations I have collaborated with.
-
-For a comprehensive overview of my professional experience and achievements, please visit my [LinkedIn profile](https://www.linkedin.com/in/thomashayen/).
+For more details, check out my [LinkedIn profile](https://www.linkedin.com/in/thomashayen/).
 
 # Latest Ramblings
 
